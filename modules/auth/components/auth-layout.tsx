@@ -21,7 +21,7 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
   return (
     <div className="min-h-screen flex">
       {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-muted/30 flex-col justify-between p-12">
+      <div className="hidden lg:flex lg:max-w-3xl relative bg-muted/30 flex-col justify-between p-12">
         {/* Background */}
         <div className="absolute inset-0 -z-10">
           <div

@@ -1,60 +1,64 @@
-import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Loader2 } from "lucide-react"
 import { Link } from "@tanstack/react-router"
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from "react-hook-form"
+import { loginSchema, LoginSchemaType } from "@/modules/auth/"
+import RHFInput from "@/modules/shared/components/rhf-components/rhf-input"
+import { Form } from "@/components/ui/form"
+import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
-  const [formData, setFormData] = useState({ email: "", password: "" })
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+  const form = useForm<LoginSchemaType>({
+    resolver: zodResolver(loginSchema),
+  })
+
+  async function onSubmit(data: LoginSchemaType) {
     setIsLoading(true)
-    // API call would go here - compatible with TanStack Start server functions
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    const {error, data:authResponse} = await authClient.signIn.email({
+      email: data.email,
+      password: data.password,
+    })
+    if(authResponse?.user){
+      toast.success("Logged in successfully!")
+      }
+    if(error){
+      toast.error(`Login failed: ${error.message}`)
+    }
     setIsLoading(false)
   }
 
+
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
+<Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
       <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
+
+          <RHFInput<LoginSchemaType>
+            name="email"
             id="email"
-            type="email"
-            placeholder="you@example.com"
-            required
-            disabled={isLoading}
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="h-12 bg-background"
+            formLabel="Email"
+            placeholder="Enter your email"  
           />
-        </div>
 
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
-            <Link
+          <RHFInput<LoginSchemaType>
+            name="password"
+            id="password"
+            type="password"
+            formLabel="Password"
+            placeholder="Enter your password"  
+          />
+              <Link
               to="/auth/forgot-password"
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               Forgot password?
             </Link>
-          </div>
-          <Input
-            id="password"
-            type="password"
-            placeholder="Enter your password"
-            required
-            disabled={isLoading}
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            className="h-12 bg-background"
-          />
         </div>
       </div>
 
@@ -119,5 +123,6 @@ export function LoginForm() {
         </Link>
       </p>
     </form>
+</Form>
   )
 }

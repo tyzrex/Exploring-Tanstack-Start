@@ -2,11 +2,13 @@ import z from "zod";
 
 export const signUpSchema = z.object({
     fullName: z.string({
-        error: "Full name is required",
+        required_error: "Full name is required",
     }).min(2, "Full name must be at least 2 characters"),
-    email: z.email("Invalid email address"),
+    email: z.string({
+        required_error: "Email is required",
+    }).email("Invalid email address"),
     password: z.string({
-        error: "Password is required",
+        required_error: "Password is required",
     }).min(8, "Password must be at least 8 characters").refine((val) => /[A-Z]/.test(val), {
         message: "Password must contain at least one uppercase letter",
     }).refine((val) => /[a-z]/.test(val), {

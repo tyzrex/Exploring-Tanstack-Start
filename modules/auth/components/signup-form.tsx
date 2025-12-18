@@ -8,7 +8,8 @@ import { Loader2, Check } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
 import { useForm } from "react-hook-form";
-import { SignUpSchemaType } from "@/modules/auth/schema/sign-up-schema";
+import {signUpSchema, type SignUpSchemaType } from "@/modules/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const benefits = ["Unlimited projects", "Content planner", "Activity timeline"];
 
@@ -27,6 +28,7 @@ export function SignupForm() {
       password: "",
       fullName: "",
     },
+    resolver:zodResolver(signUpSchema),
   });
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {

@@ -2,6 +2,7 @@ import type React from "react"
 import { TechplanoraLogo, ThemeToggle } from "@/modules/shared"
 import { Layers, CheckCircle2, Sparkles, Calendar, Activity } from "lucide-react"
 import { Link } from "@tanstack/react-router"
+import { authClient } from "@/lib/auth-client"
 
 interface AuthLayoutProps {
   children: React.ReactNode
@@ -17,7 +18,7 @@ const features = [
   { icon: Activity, label: "Activity Timeline" },
 ]
 
-export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
+export  function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
   return (
     <div className="min-h-screen flex">
       {/* Left Panel - Branding */}

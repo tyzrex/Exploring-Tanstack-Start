@@ -36,7 +36,7 @@ const users = [
 export function TargetUsersSection() {
   return (
     <section id="for-who" className="border-t border-border py-24 md:py-32">
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto container">
         <div className="mx-auto max-w-2xl text-center mb-16">
           <p className="mb-3 text-sm font-medium uppercase tracking-widest text-primary font-mono">Built For</p>
           <h2 className="text-balance text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">

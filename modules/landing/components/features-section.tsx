@@ -39,7 +39,7 @@ const features = [
 export function FeaturesSection() {
   return (
     <section id="features" className="border-t border-border py-24 md:py-32">
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto container">
         <div className="mb-16 max-w-2xl">
           <p className="mb-3 text-sm font-medium uppercase tracking-widest text-primary font-mono">Why Techplanora</p>
           <h2 className="text-balance text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">

@@ -46,7 +46,7 @@ const modules = [
 export function ModulesSection() {
   return (
     <section id="modules" className="border-t border-border bg-muted/30 py-24 md:py-32">
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto container">
         <div className="mb-16 text-center">
           <p className="mb-3 text-sm font-medium uppercase tracking-widest text-primary font-mono">Core Modules</p>
           <h2 className="text-balance text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">

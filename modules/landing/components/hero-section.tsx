@@ -22,7 +22,7 @@ export function HeroSection() {
         />
       </div>
 
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto container">
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
           <div className="animate-slide-up mb-8 inline-flex items-center gap-2">
@@ -90,7 +90,7 @@ export function HeroSection() {
 
         {/* Dashboard Preview */}
         <div className="mt-20 md:mt-28">
-          <div className="relative mx-auto max-w-5xl">
+          <div className="relative mx-auto container">
             {/* Glow behind */}
             <div className="absolute inset-x-0 -top-8 h-48 bg-gradient-to-b from-primary/20 to-transparent blur-3xl" />
 

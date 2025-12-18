@@ -1,5 +1,5 @@
 
-import { TechplanoraLogo,ThemeToggle } from "@modules/shared"
+import { TechplanoraLogo,ThemeToggle } from "@/modules/shared"
 import { Link } from "@tanstack/react-router"
 
 const footerLinks = {
@@ -25,7 +25,7 @@ const footerLinks = {
 export function LandingFooter() {
   return (
     <footer className="border-t border-border bg-muted/20 py-16 md:py-20">
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto container">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:col-span-1">

@@ -203,6 +203,11 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+@theme {
+  --breakpoint-xs: 350px;
+  --breakpoint-3xl: 1700px;
+}
+
 /* ============================================
    BASE STYLES
    ============================================ */
@@ -220,6 +225,31 @@
   h5,
   h6 {
     @apply font-display tracking-tight;
+  }
+}
+
+@utility container {
+  padding-inline: 16px;
+  margin-inline: auto;
+
+  @variant xs {
+    max-width: none;
+  }
+
+  @variant sm {
+    max-width: none;
+  }
+
+  @variant md {
+    padding-inline: 32px;
+  }
+
+  @variant 2xl {
+    padding-inline: 120px;
+  }
+
+  @variant 3xl {
+    max-width: 1900px;
   }
 }
 

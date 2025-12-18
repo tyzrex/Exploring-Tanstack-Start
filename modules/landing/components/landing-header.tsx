@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { TechplanoraLogo, ThemeToggle } from "@/modules/shared"
 import { Menu, X } from "lucide-react"
+import { TechplanoraLogo,ThemeToggle } from "@/modules/shared"
+import { Link } from "@tanstack/react-router"
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -28,21 +28,21 @@ export function LandingHeader() {
         isScrolled ? "glass border-b border-border/50 shadow-sm" : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-2.5">
+      <div className="mx-auto flex h-16 container items-center justify-between">
+        <Link to="/" className="flex items-center gap-2.5">
           <TechplanoraLogo className="h-8 w-8" showText />
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden items-center gap-1 md:flex">
           {navLinks.map((link) => (
-            <Link
+            <a
               key={link.label}
               href={link.href}
               className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50"
             >
               {link.label}
-            </Link>
+            </a>
           ))}
         </nav>
 
@@ -50,14 +50,14 @@ export function LandingHeader() {
         <div className="hidden items-center gap-3 md:flex">
           <ThemeToggle />
           <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-            <Link href="/login">Sign In</Link>
+            <Link to="/auth/login">Sign In</Link>
           </Button>
           <Button
             asChild
             size="sm"
             className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20"
           >
-            <Link href="/signup">Get Started</Link>
+            <Link to="/auth/signup">Get Started</Link>
           </Button>
         </div>
 
@@ -78,12 +78,12 @@ export function LandingHeader() {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="glass border-t border-border/50 md:hidden">
-          <div className="mx-auto max-w-6xl px-6 py-4 space-y-4">
+          <div className="mx-auto container py-4 space-y-4">
             <nav className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
-                  href={link.href}
+                  to={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="px-4 py-3 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50"
                 >
@@ -93,10 +93,10 @@ export function LandingHeader() {
             </nav>
             <div className="flex flex-col gap-2 pt-2 border-t border-border">
               <Button asChild variant="outline" className="w-full justify-center bg-transparent">
-                <Link href="/login">Sign In</Link>
+                <Link to="/auth/login">Sign In</Link>
               </Button>
               <Button asChild className="w-full justify-center bg-primary text-primary-foreground">
-                <Link href="/signup">Get Started</Link>
+                <Link to="/auth/signup">Get Started</Link>
               </Button>
             </div>
           </div>

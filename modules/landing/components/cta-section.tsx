@@ -10,7 +10,7 @@ export function CTASection() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-primary/10 blur-[128px]" />
       </div>
 
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto container">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-balance text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
             Ready to start shipping?

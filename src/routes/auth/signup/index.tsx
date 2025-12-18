@@ -4,6 +4,15 @@ export const Route = createFileRoute("/auth/signup/")({
 	component: RouteComponent,
 });
 
+import { AuthLayout, SignupForm } from "@/modules/auth";
+
 function RouteComponent() {
-	return <div>Hello "/auth/signup/"!</div>;
+	return (
+		<AuthLayout
+			title="Create your account"
+			subtitle="Start managing your workflow in minutes"
+		>
+			<SignupForm />
+		</AuthLayout>
+	);
 }

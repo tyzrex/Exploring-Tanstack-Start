@@ -1,13 +1,13 @@
-"use client"
 
 import type React from "react"
 import { useState } from "react"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Loader2, Check } from "lucide-react"
+import { Link } from "@tanstack/react-router"
+import { authClient } from "@/lib/auth-client"
 
 const benefits = ["Unlimited projects", "Content planner", "Activity timeline"]
 
@@ -16,12 +16,16 @@ export function SignupForm() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" })
   const [agreedToTerms, setAgreedToTerms] = useState(false)
 
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!agreedToTerms) return
     setIsLoading(true)
-    // API call would go here - compatible with TanStack Start server functions
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    await authClient.signUp.email({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    })
     setIsLoading(false)
   }
 
@@ -90,13 +94,13 @@ export function SignupForm() {
           />
           <Label htmlFor="terms" className="text-sm font-normal text-muted-foreground leading-relaxed">
             I agree to the{" "}
-            <Link href="/terms" className="text-primary hover:underline">
+            <a href="/terms" className="text-primary hover:underline">
               Terms of Service
-            </Link>{" "}
+            </a>{" "}
             and{" "}
-            <Link href="/privacy" className="text-primary hover:underline">
+            <a href="/privacy" className="text-primary hover:underline">
               Privacy Policy
-            </Link>
+            </a>
           </Label>
         </div>
       </div>
@@ -157,7 +161,7 @@ export function SignupForm() {
 
       <p className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}
-        <Link href="/login" className="font-medium text-primary hover:underline">
+        <Link to="/auth/login" className="font-medium text-primary hover:underline">
           Sign in
         </Link>
       </p>

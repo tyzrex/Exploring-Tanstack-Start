@@ -1,7 +1,7 @@
 import type React from "react"
-import Link from "next/link"
 import { TechplanoraLogo, ThemeToggle } from "@/modules/shared"
 import { Layers, CheckCircle2, Sparkles, Calendar, Activity } from "lucide-react"
+import { Link } from "@tanstack/react-router"
 
 interface AuthLayoutProps {
   children: React.ReactNode
@@ -36,14 +36,14 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
 
         {/* Header */}
         <div className="flex items-center justify-between relative">
-          <Link href="/" className="inline-flex items-center gap-2.5">
+          <Link to="/" className="inline-flex items-center gap-2.5">
             <TechplanoraLogo className="h-9 w-9" showText />
           </Link>
           <ThemeToggle />
         </div>
 
         {/* Testimonial */}
-        <div className="max-w-md relative">
+        <div className="max-w-3xl relative">
           <blockquote className="space-y-6">
             <p className="text-2xl font-display font-medium leading-relaxed">
               &ldquo;Finally, a tool that understands how I actually work. Projects, content, calls — all unified in one
@@ -83,7 +83,7 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
       <div className="flex-1 flex flex-col bg-background">
         {/* Mobile Header */}
         <div className="lg:hidden p-6 flex items-center justify-between border-b border-border">
-          <Link href="/" className="inline-flex items-center gap-2.5">
+          <Link to="/" className="inline-flex items-center gap-2.5">
             <TechplanoraLogo className="h-8 w-8" showText />
           </Link>
           <ThemeToggle />
@@ -91,7 +91,7 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
 
         {/* Form Container */}
         <div className="flex-1 flex items-center justify-center p-6 md:p-12">
-          <div className="w-full max-w-sm space-y-8">
+          <div className="w-full max-w-xl space-y-8">
             <div className="space-y-2 text-center lg:text-left">
               <h1 className="text-2xl font-display font-bold tracking-tight">{title}</h1>
               <p className="text-muted-foreground">{subtitle}</p>

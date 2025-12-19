@@ -8,8 +8,7 @@ export const Route = createFileRoute("/auth/login/")({
 		const { data: authResponse } = await authClient.getSession();
 		if (authResponse?.session) {
 			throw redirect({
-				to: "/",
-				search: { redirect: location.href },
+				to: "/dashboard",
 			});
 		}
 	},

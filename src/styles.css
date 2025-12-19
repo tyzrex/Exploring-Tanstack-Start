@@ -9,10 +9,10 @@
   ================================================
   A comprehensive design system for building
   modern dashboard applications.
-  
+
   Font Stack: Space Grotesk (headings) + Inter (body)
   Brand Color: Indigo (#6366f1)
-  
+
   Usage:
   - Headings: font-display (Space Grotesk)
   - Body: font-sans (Inter)
@@ -381,4 +381,17 @@
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
+}
+
+/* 
+  ---break---
+*/
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

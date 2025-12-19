@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { authClient } from "@/lib/auth-client";
 import {
 	CTASection,
 	FeaturesSection,
@@ -9,7 +10,17 @@ import {
 	TargetUsersSection,
 } from "@/modules/landing";
 
-export const Route = createFileRoute("/")({ component: App });
+export const Route = createFileRoute("/")({
+	component: App,
+	beforeLoad: async () => {
+		const session = await authClient.getSession();
+		if (session.data?.session) {
+			throw redirect({
+				to: "/dashboard",
+			});
+		}
+	},
+});
 
 function App() {
 	return (

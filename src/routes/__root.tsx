@@ -49,7 +49,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body>
 				<ThemeProvider>
-					{children}
+					<div className="flex flex-1 flex-col gap-4">{children}</div>
 					<TanStackDevtools
 						config={{
 							position: "bottom-right",

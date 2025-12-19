@@ -26,6 +26,12 @@ model User {
   accounts      Account[]
 
   @@map("user")
+  tasks Task[]
+  contentIdeas ContentIdea[]
+  calls Call[]
+  activityLogs ActivityLog[]
+  userPreferences UserPreference[]
+  projects Project[]
 }
 
 model Session {
@@ -74,4 +80,296 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+
+// ============================================
+// PROJECTS
+// ============================================
+
+enum ProjectStatus {
+  PLANNED
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ARCHIVED
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  userId      String
+  name        String
+  description String?       @db.Text
+  status      ProjectStatus @default(PLANNED)
+  startDate   DateTime?
+  deadline    DateTime?
+  color       String?
+  confidence  Int?          // 1–100 confidence score
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  milestones      Milestone[]
+  tasks           Task[]
+  calls           Call[]
+  decisions       ArchitectureDecision[]
+  risks           ProjectRisk[]
+  retrospectives  Retrospective[]
+  activityLogs    ActivityLog[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([deadline])
+  @@map("projects")
+}
+
+model Milestone { 
+  id          String    @id @default(cuid())
+  projectId   String
+  title       String
+  description String?   @db.Text
+  dueDate     DateTime?
+  completed   Boolean   @default(false)
+  completedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([dueDate])
+  @@map("milestones")
+}
+
+// ============================================
+// ARCHITECTURE & DECISIONS
+// ============================================
+
+enum DecisionStatus {
+  PROPOSED
+  ACCEPTED
+  DEPRECATED
+}
+
+model ArchitectureDecision {
+  id            String         @id @default(cuid())
+  projectId     String
+  title         String
+  context       String         @db.Text
+  decision      String         @db.Text
+  alternatives  String?        @db.Text
+  consequences  String?        @db.Text
+  status        DecisionStatus @default(ACCEPTED)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("architecture_decisions")
+}
+
+// ============================================
+// RISKS & ASSUMPTIONS
+// ============================================
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model ProjectRisk {
+  id          String    @id @default(cuid())
+  projectId   String
+  title       String
+  description String?  @db.Text
+  level       RiskLevel
+  mitigation  String?  @db.Text
+  resolved    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([level])
+  @@map("project_risks")
+}
+
+// ============================================
+// TASKS
+// ============================================
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  BLOCKED
+  DONE
+}
+
+model Task {
+  id          String       @id @default(cuid())
+  userId      String
+  projectId   String?
+  title       String
+  description String?      @db.Text
+  status      TaskStatus   @default(TODO)
+  priority    TaskPriority @default(MEDIUM)
+  dueDate     DateTime?
+  completedAt DateTime?
+  order       Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([projectId])
+  @@index([status])
+  @@map("tasks")
+}
+
+// ============================================
+// CONTENT PLANNER
+// ============================================
+
+enum ContentPlatform {
+  YOUTUBE_SHORTS
+  INSTAGRAM_REELS
+  TIKTOK
+  LINKEDIN
+  BLOG
+  OTHER
+}
+
+enum ContentStatus {
+  IDEA
+  OUTLINED
+  DRAFTED
+  RECORDED
+  EDITED
+  SCHEDULED
+  PUBLISHED
+}
+
+model ContentIdea {
+  id          String         @id @default(cuid())
+  userId      String
+  title       String
+  description String?        @db.Text
+  platform    ContentPlatform
+  status      ContentStatus  @default(IDEA)
+  publishDate DateTime?
+  url         String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([platform])
+  @@map("content_ideas")
+}
+
+// ============================================
+// CALLS / SCHEDULE
+// ============================================
+
+enum CallType {
+  CLIENT
+  INTERVIEW
+  SYNC
+  STANDUP
+  DEMO
+  OTHER
+}
+
+model Call {
+  id          String    @id @default(cuid())
+  userId      String
+  projectId   String?
+  title       String
+  callType    CallType
+  scheduledAt DateTime
+  duration    Int?
+  meetingUrl  String?
+  notes       String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@index([scheduledAt])
+  @@map("calls")
+}
+
+// ============================================
+// RETROSPECTIVES
+// ============================================
+
+model Retrospective {
+  id          String   @id @default(cuid())
+  projectId   String
+  wentWell    String?  @db.Text
+  wentBad     String?  @db.Text
+  learnings   String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("retrospectives")
+}
+
+// ============================================
+// ACTIVITY LOG
+// ============================================
+
+enum ActivityType {
+  PROJECT_CREATED
+  TASK_COMPLETED
+  DECISION_ADDED
+  CONTENT_PUBLISHED
+}
+
+model ActivityLog {
+  id           String       @id @default(cuid())
+  userId       String
+  activityType ActivityType
+  title        String
+  metadata     Json?
+  createdAt    DateTime     @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@map("activity_logs")
+  projects Project[]
+}
+
+// ============================================
+// USER PREFERENCES
+// ============================================
+
+model UserPreference {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  theme     String   @default("dark")
+  timezone  String   @default("UTC")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
 }

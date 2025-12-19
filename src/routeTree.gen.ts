@@ -9,19 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as DashboardRouteImport } from './routes/_dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardLayoutRouteImport } from './routes/dashboard/_layout'
 import { Route as DashboardLayoutIndexRouteImport } from './routes/dashboard/_layout/index'
 import { Route as AuthSignupIndexRouteImport } from './routes/auth/signup/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
 import { Route as AuthForgotPasswordIndexRouteImport } from './routes/auth/forgot-password/index'
+import { Route as DashboardLayoutProjectsRouteImport } from './routes/dashboard/_layout/projects'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/_dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -52,6 +48,11 @@ const AuthForgotPasswordIndexRoute = AuthForgotPasswordIndexRouteImport.update({
   path: '/auth/forgot-password/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardLayoutProjectsRoute = DashboardLayoutProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -62,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardLayoutRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/projects': typeof DashboardLayoutProjectsRoute
   '/auth/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
@@ -70,6 +72,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/projects': typeof DashboardLayoutProjectsRoute
   '/auth/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
@@ -78,9 +81,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_dashboard': typeof DashboardRoute
   '/dashboard/_layout': typeof DashboardLayoutRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/_layout/projects': typeof DashboardLayoutProjectsRoute
   '/auth/forgot-password/': typeof AuthForgotPasswordIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/auth/signup/': typeof AuthSignupIndexRoute
@@ -92,6 +95,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/api/auth/$'
+    | '/dashboard/projects'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/signup'
@@ -100,6 +104,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/api/auth/$'
+    | '/dashboard/projects'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/signup'
@@ -107,9 +112,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/_dashboard'
     | '/dashboard/_layout'
     | '/api/auth/$'
+    | '/dashboard/_layout/projects'
     | '/auth/forgot-password/'
     | '/auth/login/'
     | '/auth/signup/'
@@ -118,7 +123,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
   DashboardLayoutRoute: typeof DashboardLayoutRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   AuthForgotPasswordIndexRoute: typeof AuthForgotPasswordIndexRoute
@@ -128,13 +132,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_dashboard': {
-      id: '/_dashboard'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -177,6 +174,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/_layout/projects': {
+      id: '/dashboard/_layout/projects'
+      path: '/projects'
+      fullPath: '/dashboard/projects'
+      preLoaderRoute: typeof DashboardLayoutProjectsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -188,10 +192,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface DashboardLayoutRouteChildren {
+  DashboardLayoutProjectsRoute: typeof DashboardLayoutProjectsRoute
   DashboardLayoutIndexRoute: typeof DashboardLayoutIndexRoute
 }
 
 const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
+  DashboardLayoutProjectsRoute: DashboardLayoutProjectsRoute,
   DashboardLayoutIndexRoute: DashboardLayoutIndexRoute,
 }
 
@@ -201,7 +207,6 @@ const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
   DashboardLayoutRoute: DashboardLayoutRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   AuthForgotPasswordIndexRoute: AuthForgotPasswordIndexRoute,

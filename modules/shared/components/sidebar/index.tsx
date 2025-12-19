@@ -111,7 +111,7 @@ const menuGroups = [
 
 export function AppSidebar() {
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader className="border-b">
         <SidebarMenu>
           <SidebarMenuItem>
@@ -135,7 +135,7 @@ export function AppSidebar() {
                     <SidebarMenuButton tooltip={item.title} asChild>
                       <Link to={item.url}>
                         {item.icon && <item.icon className="size-4" />}
-                        <span className="text-muted-foreground">{item.title}</span>
+                        <span className="text-muted-foreground dark:text-sidebar-foreground">{item.title}</span>
                         <ChevronRight className="ml-auto size-4 opacity-50" />
                       </Link>
                     </SidebarMenuButton>
@@ -152,7 +152,7 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton>
               <Settings className="size-4" />
-              <span className="text-muted-foreground">Settings</span>
+              <span className="text-sidebar-foreground">Settings</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

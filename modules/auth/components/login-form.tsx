@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
-import { Link } from "@tanstack/react-router"
+import { Link, useNavigate } from "@tanstack/react-router"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from "react-hook-form"
 import { loginSchema, LoginSchemaType } from "@/modules/auth/"
@@ -12,6 +12,7 @@ import { toast } from "sonner";
 
 export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
+  const navigation = useNavigate()
 
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
@@ -25,7 +26,8 @@ export function LoginForm() {
     })
     if(authResponse?.user){
       toast.success("Logged in successfully!")
-      }
+      navigation({ to: "/dashboard" })
+    }
     if(error){
       toast.error(`Login failed: ${error.message}`)
     }

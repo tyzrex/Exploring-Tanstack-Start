@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { LogOut, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -15,10 +15,14 @@ import {
 	SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
+import { authMiddleware } from "@/middleware/auth";
 import { AppSidebar, ThemeToggle } from "@/modules/shared";
 
 export const Route = createFileRoute("/dashboard/_layout")({
 	component: RouteComponent,
+	server: {
+		middleware: [authMiddleware],
+	},
 });
 
 function RouteComponent() {
@@ -33,37 +37,30 @@ function RouteComponent() {
 		<SidebarProvider>
 			<AppSidebar />
 			<SidebarInset>
-				<header className="flex h-[65px] shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 border-b">
+				<header className="flex h-16.25 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12.25 border-b">
 					<div className="flex w-full items-center justify-between gap-2 px-4">
 						<SidebarTrigger className="-ml-1" />
 						<div className="flex items-center gap-2">
 							<ThemeToggle />
+							{isPending && (
+								<div className="w-4 h-4 border-2 border-t-transparent border-gray-200 rounded-full animate-spin"></div>
+							)}
 							{data && (
 								<DropdownMenu>
 									<DropdownMenuTrigger asChild>
-										<button
-											type="button"
-											className="flex items-center gap-2 rounded-lg px-2 py-1 hover:bg-accent"
-										>
-											<Avatar className="h-8 w-8 rounded-lg">
-												<AvatarImage
-													src={
-														data?.user?.image || ""
-													}
-													alt={data?.user?.name || ""}
-												/>
-												<AvatarFallback className="rounded-lg">
-													{data?.user?.name
-														?.charAt(0)
-														?.toUpperCase() || (
-														<User className="size-4" />
-													)}
-												</AvatarFallback>
-											</Avatar>
-											<span className="text-sm font-medium">
-												{data?.user?.name || "User"}
-											</span>
-										</button>
+										<Avatar className="h-8 w-8 rounded-lg">
+											<AvatarImage
+												src={data?.user?.image || ""}
+												alt={data?.user?.name || ""}
+											/>
+											<AvatarFallback className="rounded-lg">
+												{data?.user?.name
+													?.charAt(0)
+													?.toUpperCase() || (
+													<User className="size-4" />
+												)}
+											</AvatarFallback>
+										</Avatar>
 									</DropdownMenuTrigger>
 									<DropdownMenuContent
 										align="end"
